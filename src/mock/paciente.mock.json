@@ -1,0 +1,27 @@
+{ 
+    "nombre": "María González", 
+    "dni": "28765432", 
+    "direccion": { 
+        "calle": "Belgrano", 
+        "numero": "456", 
+        "piso": "3", 
+        "departamento": "A", 
+        "barrio": "Norte" 
+    }, 
+    "email": "maria.gonzalez@hotmail.com", 
+    "telefono": { 
+        "tipo": "FIJO", 
+        "codigoArea": "3777", 
+        "numero": "4455667" 
+    }, 
+    "obraSocial": { 
+        "nombre": "PAMI", 
+        "numeroAfiliado": "PAM987654" 
+    },
+    "historiaClinica": {
+        "fecha": "2027-07-21T10:00:00.000Z",
+        "diagnostico": "Insuficiencia cardíaca",
+        "tratamiento": "Control clínico y medicación",
+        "medico": "Dr. Carlos Gómez"
+    } 
+}

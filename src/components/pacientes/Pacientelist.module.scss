@@ -1,0 +1,168 @@
+@use '../utils/paleta' as *;
+
+.contenedor {
+    max-width: 1100px;
+    margin: 0 auto;
+    color: $texto;
+}
+
+.encabezado {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+    font-weight: 700;
+    color: $primario-oscuro;
+}
+
+.barra {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 16px;
+    margin-bottom: 16px;
+}
+
+.buscador {
+    flex: 1 1 260px;
+    max-width: 460px;
+}
+
+.tabla {
+    background: $superficie;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    overflow: hidden;
+
+    thead th {
+        background: $primario-suave;
+        color: $primario-profundo;
+        font-weight: 700;
+        border-bottom: 2px solid $primario;
+        white-space: nowrap;
+    }
+}
+
+.ordenable {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus-visible {
+        color: $primario;
+    }
+}
+
+.filaInactiva {
+    color: $texto-suave;
+    background: #fafbfb;
+}
+
+.chip {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: $primario-suave;
+    color: $primario-profundo;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.tarjeta {
+    background: $superficie;
+    border: 1px solid $borde;
+    border-left: 6px solid $primario;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    padding: 14px 16px;
+
+    &.tarjetaInactiva {
+        border-left-color: #9aa5a3;
+        background: #fafbfb;
+    }
+}
+
+.tarjetaTitulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.dato {
+    color: $texto-suave;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.esqueleto {
+    display: block;
+    height: 2.8rem;
+    margin-bottom: 0.6rem;
+    border-radius: $radio;
+}
+
+.pie {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+// La paginación con los colores de la app
+.paginacion {
+    --bs-pagination-color: #{$primario-profundo};
+    --bs-pagination-hover-color: #{$primario-profundo};
+    --bs-pagination-hover-bg: #{$primario-suave};
+    --bs-pagination-active-bg: #{$primario};
+    --bs-pagination-active-border-color: #{$primario};
+    --bs-pagination-focus-color: #{$primario-profundo};
+}
+
+
+// Toda la fila (o tarjeta) abre el detalle del paciente
+.filaClicable {
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2px solid $primario;
+        outline-offset: -2px;
+    }
+}
+
+// Botón chico para copiar DNI o teléfono
+.copiar {
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    margin-left: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: $texto-suave;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+        background: $primario-suave;
+        color: $primario-oscuro;
+    }
+}

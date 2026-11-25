@@ -1,0 +1,170 @@
+@use '../components/utils/paleta' as *;
+
+.contenedor {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.encabezado {
+    margin-bottom: 18px;
+}
+
+.titulo {
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    font-weight: 700;
+    color: $primario-oscuro;
+}
+
+.subtitulo {
+    margin: 0;
+    color: $texto-suave;
+}
+
+// Selector de vista (mismo estilo "píldora" que el resto)
+.pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0;
+}
+
+.pill {
+    border: 1px solid $borde;
+    background: $superficie;
+    color: $texto;
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+    &:hover {
+        border-color: $primario;
+    }
+}
+
+.pillActiva {
+    background: $primario;
+    border-color: $primario;
+    color: #fff;
+}
+
+.contador {
+    margin-left: 6px;
+    font-size: 0.8rem;
+    opacity: 0.85;
+}
+
+.vacio {
+    padding: 28px 16px;
+    text-align: center;
+    color: $texto-suave;
+    background: $superficie;
+    border-radius: $radio;
+    box-shadow: $sombra;
+}
+
+// Un horario liberado
+.hueco {
+    background: $superficie;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.huecoCab {
+    padding: 14px 18px;
+    background: $primario-suave;
+    border-bottom: 2px solid $primario;
+}
+
+.huecoFecha {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $primario-profundo;
+    text-transform: capitalize;
+}
+
+.huecoMeta {
+    margin: 2px 0 0;
+    color: $texto-suave;
+    font-size: 0.92rem;
+}
+
+.candidato {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid $borde;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.orden {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: $primario-suave;
+    color: $primario-profundo;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.candInfo {
+    flex: 1 1 220px;
+    min-width: 0;
+}
+
+.candNombre {
+    font-weight: 600;
+}
+
+.candDato {
+    font-size: 0.88rem;
+    color: $texto-suave;
+}
+
+// Formulario para anotar a alguien
+.anotar {
+    background: $superficie;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+.anotarTitulo {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $primario-oscuro;
+}
+
+.anotarGrilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    align-items: start;
+}
+
+.pacienteEncontrado {
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: $primario-suave;
+    color: $primario-profundo;
+    font-size: 0.92rem;
+}

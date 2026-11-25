@@ -1,0 +1,110 @@
+@use '../components/utils/paleta' as *;
+
+.pagina {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px 16px;
+    background: $fondo-pagina;
+}
+
+.tarjeta {
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 28px;
+    background: $superficie;
+    border: 1px solid $borde;
+    border-top: 5px solid $primario;
+    border-radius: $radio;
+    box-shadow: $sombra;
+}
+
+.marca {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.logo {
+    display: inline-grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 12px;
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(135deg, $primario, $primario-oscuro);
+    box-shadow: 0 4px 12px rgba(18, 135, 123, 0.35);
+}
+
+.nombre {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $primario-profundo;
+}
+
+.subtitulo {
+    margin: 4px 0 0;
+    color: $texto-suave;
+}
+
+.campo {
+    margin-bottom: 16px;
+}
+
+// Ícono a la izquierda de cada campo
+.grupo {
+    :global(.input-group-text) {
+        color: $primario-oscuro;
+        background: $primario-suave;
+        border-color: $borde;
+    }
+
+    :global(.form-control) {
+        padding: 10px 12px;
+        border-color: $borde;
+
+        &:focus {
+            border-color: $primario;
+            box-shadow: 0 0 0 0.2rem rgba(31, 181, 165, 0.2);
+        }
+    }
+
+    :global(.btn) {
+        color: $texto-suave;
+        border-color: $borde;
+        background: #fff;
+
+        &:hover {
+            color: $primario-profundo;
+            background: $primario-suave;
+        }
+    }
+}
+
+.error {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.85rem;
+    color: $error;
+}
+
+.enviar {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.volver {
+    display: block;
+    margin-top: 16px;
+    text-align: center;
+    font-weight: 600;
+    color: $primario-oscuro;
+    text-decoration: none;
+
+    &:hover {
+        color: $primario-profundo;
+        text-decoration: underline;
+    }
+}

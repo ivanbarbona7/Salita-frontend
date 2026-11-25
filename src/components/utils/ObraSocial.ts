@@ -1,0 +1,2 @@
+// Nombre de la obra social para mostrar (el catálogo ya trae el nombre completo; "otra" quedó de la lista fija anterior)
+export const nombreObraSocial = (os?: { nombre?: string | undefined } | null): string => os?.nombre ?? '';

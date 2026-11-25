@@ -1,0 +1,487 @@
+@use './Paleta' as *;
+
+// =====================================================
+// Estilos compartidos de formularios (consultorios ahora;
+// médicos, pacientes y turnos pueden pasarse a este archivo).
+// =====================================================
+
+.pagina {
+    background: $fondo-pagina;
+    min-height: 100%;
+    padding: 24px 16px 32px;
+}
+
+.contenedorFormulario {
+    max-width: 860px;
+    margin: 0 auto;
+    color: $texto;
+}
+
+.titulo {
+    text-align: center;
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    font-weight: 700;
+    color: $primario-oscuro;
+    margin-bottom: 24px;
+
+    &::after {
+        content: '';
+        display: block;
+        width: 56px;
+        height: 4px;
+        border-radius: 2px;
+        background: $primario;
+        margin: 10px auto 0;
+    }
+}
+
+// ---------- Tarjetas de sección ----------
+.seccion {
+    background: $superficie;
+    border: 1px solid $borde;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    padding: 16px 24px 24px;
+    margin: 0 0 20px;
+    min-width: 0;
+}
+
+.seccionTitulo {
+    float: none;
+    width: auto;
+    padding: 0 10px;
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $primario-oscuro;
+}
+
+.grilla {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 20px;
+}
+
+.grilla3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px 20px;
+}
+
+.separado {
+    margin-top: 16px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.campoAncho {
+    grid-column: 1 / -1;
+}
+
+.label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    color: $texto;
+}
+
+.campoInput {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    color: $texto;
+    background: #fff;
+    border: 1px solid $borde;
+    border-radius: 8px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &::placeholder {
+        color: #97a5a2;
+    }
+
+    &:hover {
+        border-color: #9fb1ad;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $primario;
+        box-shadow: 0 0 0 3px rgba($primario, 0.25);
+    }
+
+    &[aria-invalid='true'] {
+        border-color: $error;
+        background: $error-suave;
+
+        &:focus {
+            box-shadow: 0 0 0 3px rgba($error, 0.2);
+        }
+    }
+
+    &:read-only {
+        background: #f1f4f3;
+    }
+}
+
+.textError,
+.textoError {
+    color: $error;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+}
+
+.ayuda {
+    color: $texto-suave;
+    font-size: 0.85rem;
+    margin: 0 0 14px;
+}
+
+.filaTelefono {
+    display: grid;
+    grid-template-columns: 170px 150px minmax(0, 1fr);
+    gap: 16px 20px;
+}
+
+// ---------- Opciones tipo "chip" (varias especialidades) ----------
+.grupoOpciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chip {
+    position: relative;
+    display: inline-flex;
+    margin: 0;
+    cursor: pointer;
+
+    input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    span {
+        padding: 8px 16px;
+        border: 2px solid $borde;
+        border-radius: 999px;
+        background: #fff;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: $texto-suave;
+        transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    &:hover span {
+        border-color: $primario;
+        color: $primario-oscuro;
+    }
+
+    input:checked + span {
+        background: $primario-oscuro;
+        border-color: $primario-oscuro;
+        color: #fff;
+        box-shadow: 0 2px 6px rgba($primario-oscuro, 0.35);
+
+        &::before {
+            content: '✓ ';
+        }
+    }
+
+    input:focus-visible + span {
+        box-shadow: 0 0 0 3px rgba($primario, 0.4);
+    }
+}
+
+// Etiqueta de solo lectura (por ejemplo, los médicos que atienden en un consultorio)
+.etiqueta {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: $primario-suave;
+    color: $primario-profundo;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+// ---------- Editor semanal de franjas horarias ----------
+.dias {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dia {
+    border: 1px solid $borde;
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: #fff;
+
+    &.diaVacio {
+        background: #fafbfb;
+    }
+}
+
+.diaEncabezado {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.diaNombre {
+    font-weight: 700;
+    color: $primario-oscuro;
+}
+
+.diaSinHorario {
+    color: $texto-suave;
+    font-size: 0.9rem;
+    margin-left: 10px;
+    font-weight: 400;
+}
+
+.diaAcciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.franja {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px 12px;
+    margin-top: 10px;
+}
+
+.franjaHora {
+    width: 150px;
+}
+
+.franjaConsultorio {
+    flex: 1 1 200px;
+    min-width: 160px;
+    max-width: 320px;
+}
+
+.franjaSeparador {
+    padding-top: 10px;
+    color: $texto-suave;
+}
+
+// ---------- Estado (interruptor Activo / Inactivo) ----------
+.estado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    background: $superficie;
+    border: 1px solid $borde;
+    border-left: 6px solid $primario;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+
+    &.estadoInactivo {
+        border-left-color: #9aa5a3;
+        background: #fafbfb;
+    }
+
+    &.estadoUrgente {
+        border-left-color: $error;
+        background: $error-suave;
+    }
+
+    .interruptor {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        font-weight: 600;
+
+        :global(.form-check-input) {
+            float: none;
+            margin: 0;
+            width: 3em;
+            height: 1.5em;
+            cursor: pointer;
+
+            &:checked {
+                background-color: $primario-oscuro;
+                border-color: $primario-oscuro;
+            }
+
+            &:focus {
+                border-color: $primario;
+                box-shadow: 0 0 0 3px rgba($primario, 0.3);
+            }
+        }
+
+        :global(.form-check-label) {
+            cursor: pointer;
+        }
+    }
+}
+
+.estadoTexto {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    strong {
+        font-size: 1.05rem;
+    }
+
+    span {
+        color: $texto-suave;
+        font-size: 0.9rem;
+    }
+}
+
+// ---------- Botones ----------
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.botonPrincipal:global(.btn) {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #{$primario-oscuro};
+    --bs-btn-border-color: #{$primario-oscuro};
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #{$primario-profundo};
+    --bs-btn-hover-border-color: #{$primario-profundo};
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #{$primario-profundo};
+    --bs-btn-active-border-color: #{$primario-profundo};
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #{$primario};
+    --bs-btn-disabled-border-color: #{$primario};
+    --bs-btn-focus-shadow-rgb: 31, 181, 165;
+
+    padding: 12px 28px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba($primario-oscuro, 0.35);
+    transition: transform 0.12s, box-shadow 0.12s;
+
+    &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba($primario-oscuro, 0.4);
+    }
+}
+
+.botonSecundario:global(.btn) {
+    --bs-btn-color: #{$primario-oscuro};
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: #{$primario};
+    --bs-btn-hover-color: #{$primario-profundo};
+    --bs-btn-hover-bg: #{$primario-suave};
+    --bs-btn-hover-border-color: #{$primario};
+    --bs-btn-active-color: #{$primario-profundo};
+    --bs-btn-active-bg: #{$primario-suave};
+    --bs-btn-active-border-color: #{$primario};
+    --bs-btn-focus-shadow-rgb: 31, 181, 165;
+
+    padding: 12px 24px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-width: 2px;
+    border-radius: 10px;
+}
+
+// Botones chicos (dentro de las filas del editor de horarios y de las listas)
+.botonChico:global(.btn) {
+    --bs-btn-color: #{$primario-oscuro};
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: #{$primario};
+    --bs-btn-hover-color: #{$primario-profundo};
+    --bs-btn-hover-bg: #{$primario-suave};
+    --bs-btn-hover-border-color: #{$primario};
+    --bs-btn-active-color: #{$primario-profundo};
+    --bs-btn-active-bg: #{$primario-suave};
+    --bs-btn-active-border-color: #{$primario};
+
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.botonChicoPeligro:global(.btn) {
+    --bs-btn-color: #{$error};
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: #e6a9a5;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #{$error};
+    --bs-btn-hover-border-color: #{$error};
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #{$error};
+    --bs-btn-active-border-color: #{$error};
+
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+// ---------- Responsive ----------
+@media (max-width: 767px) {
+    .pagina {
+        padding: 16px 12px 24px;
+    }
+
+    .seccion {
+        padding: 12px 16px 18px;
+    }
+
+    .grilla,
+    .grilla3 {
+        grid-template-columns: 1fr;
+    }
+
+    .filaTelefono {
+        grid-template-columns: 1fr 1fr;
+
+        > :first-child {
+            grid-column: 1 / -1;
+        }
+    }
+
+    .franjaHora {
+        flex: 1 1 120px;
+        width: auto;
+    }
+
+    .acciones {
+        position: sticky;
+        bottom: 0;
+        z-index: 5;
+        background: $fondo-pagina;
+        padding: 12px 0 4px;
+        box-shadow: 0 -8px 12px -8px rgba(0, 0, 0, 0.12);
+
+        > * {
+            flex: 1;
+            text-align: center;
+        }
+    }
+}
+
+@media (max-width: 380px) {
+    .filaTelefono {
+        grid-template-columns: 1fr;
+    }
+}

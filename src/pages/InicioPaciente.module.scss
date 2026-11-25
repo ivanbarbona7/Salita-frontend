@@ -1,0 +1,224 @@
+@use '../components/utils/paleta' as *;
+
+.contenedor {
+    display: grid;
+    gap: 22px;
+}
+
+// ---------- Tarjeta del turno ----------
+.turno {
+    display: flex;
+    gap: 18px;
+    padding: 20px;
+    border-radius: $radio;
+    background: $primario-suave;
+    border-left: 8px solid $primario;
+    box-shadow: $sombra;
+}
+
+// Si el turno es hoy: tarjeta de color pleno, imposible de pasar por alto
+.turnoHoy {
+    color: #fff;
+    background: linear-gradient(135deg, $primario 0%, $primario-oscuro 100%);
+    border-left-color: $primario-profundo;
+}
+
+.fecha {
+    flex: 0 0 auto;
+    width: 78px;
+    align-self: flex-start;
+    padding: 8px 4px;
+    text-align: center;
+    line-height: 1.1;
+    border-radius: 14px;
+    color: #fff;
+    background: $primario;
+}
+
+.turnoHoy .fecha {
+    color: $primario-profundo;
+    background: #fff;
+}
+
+.diaSemana,
+.mes {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.mes {
+    text-transform: uppercase;
+}
+
+.diaNumero {
+    display: block;
+    font-size: 2.1rem;
+    font-weight: 800;
+}
+
+.cuerpo {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.cuando {
+    display: inline-block;
+    margin: 0 0 6px;
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #fff;
+    background: $primario-oscuro;
+}
+
+.turnoHoy .cuando {
+    color: $primario-profundo;
+    background: #fff;
+}
+
+.hora {
+    margin: 0;
+    font-size: clamp(2rem, 8vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: $primario-profundo;
+}
+
+.turnoHoy .hora {
+    color: #fff;
+}
+
+.especialidad {
+    margin: 6px 0 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.medico {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.lugar {
+    margin: 4px 0 0;
+    font-size: 0.95rem;
+    opacity: 0.85;
+}
+
+.verDetalle {
+    margin-top: 14px;
+    padding: 8px 20px;
+    font-weight: 700;
+    border-radius: 12px;
+}
+
+// ---------- Botones grandes de acciones ----------
+.acciones {
+    display: grid;
+    gap: 14px;
+}
+
+.accion {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 20px;
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: 800;
+    border-radius: $radio;
+    border: 2px solid transparent;
+    box-shadow: $sombra;
+    cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+        outline: 3px solid $primario-profundo;
+        outline-offset: 3px;
+    }
+}
+
+.accionIcono {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+}
+
+.accionTexto small {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    opacity: 0.85;
+}
+
+.pedir {
+    color: #fff;
+    background: $primario;
+
+    .accionIcono {
+        background: rgba(255, 255, 255, 0.22);
+    }
+
+    &:hover {
+        background: $primario-oscuro;
+    }
+}
+
+.secundaria {
+    color: $primario-profundo;
+    background: $superficie;
+    border-color: $primario;
+
+    .accionIcono {
+        color: #fff;
+        background: $primario;
+    }
+}
+
+.perfil {
+    color: $texto;
+    background: $superficie;
+    border-color: $borde;
+    font-size: 1.25rem;
+
+    .accionIcono {
+        width: 46px;
+        height: 46px;
+        color: $primario-profundo;
+        background: $primario-suave;
+    }
+}
+
+@media (max-width: 480px) {
+    .turno {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .fecha {
+        width: auto;
+        align-self: stretch;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .diaNumero {
+        display: inline;
+        font-size: 1.6rem;
+    }
+}

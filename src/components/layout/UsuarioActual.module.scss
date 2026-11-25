@@ -1,0 +1,71 @@
+@use '../utils/paleta' as *;
+
+// Insignia con el rol: siempre visible al lado del nombre de la app
+.rol {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 10px;
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #fff;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.admin { background: #c77d0a; }
+.recepcionista { background: $primario; }
+.medico { background: #2e6fba; }
+.paciente { background: #6c757d; }
+
+// Quien está conectado: en escritorio solo el círculo con las iniciales
+.nombre {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: default;
+    border-radius: 999px;
+
+    &:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+}
+
+.avatar {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: $primario-profundo;
+    background: #fff;
+}
+
+// El nombre completo solo se ve en el menú de celular
+.textoMovil {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .nombre {
+        margin: 8px 0;
+        max-width: 100%;
+    }
+
+    .textoMovil {
+        display: inline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}

@@ -1,0 +1,206 @@
+@use '../components/utils/paleta' as *;
+
+$acento-clave: #c77d0a;       // cálido, para la seguridad (contraseña)
+$acento-clave-suave: #fdf3e0;
+
+// ---------- Cabecera con el nombre ----------
+.hero {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px;
+    margin-bottom: 20px;
+    border-radius: $radio;
+    color: #fff;
+    background: linear-gradient(135deg, $primario 0%, $primario-oscuro 100%);
+    box-shadow: $sombra;
+}
+
+.avatar {
+    flex: 0 0 auto;
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: $primario-profundo;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.35);
+}
+
+.heroTexto {
+    min-width: 0;
+}
+
+.heroNombre {
+    margin: 0;
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.heroSub {
+    margin: 4px 0 0;
+    opacity: 0.92;
+    overflow-wrap: anywhere;
+}
+
+// ---------- Tarjetas de sección ----------
+.seccion {
+    margin-bottom: 20px;
+    background: $superficie;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    overflow: hidden;
+}
+
+.seccionCab {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: $primario-suave;
+    border-bottom: 2px solid $primario;
+}
+
+.seccionClave .seccionCab {
+    background: $acento-clave-suave;
+    border-bottom-color: $acento-clave;
+}
+
+.icono {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: $primario;
+}
+
+.seccionClave .icono {
+    background: $acento-clave;
+}
+
+.seccionTitulo {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $primario-profundo;
+}
+
+.seccionClave .seccionTitulo {
+    color: #7a4a00;
+}
+
+.seccionCuerpo {
+    padding: 20px;
+}
+
+// ---------- Datos fijos ----------
+.datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 14px;
+}
+
+.dato {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #f6fbfa;
+    border: 1px solid $borde;
+}
+
+.datoIcono {
+    flex: 0 0 auto;
+    color: $primario;
+}
+
+.datoEtiqueta {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $texto-suave;
+}
+
+.datoValor {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $texto;
+    overflow-wrap: anywhere;
+}
+
+.aviso {
+    display: block;
+    margin-top: 14px;
+    color: $texto-suave;
+}
+
+// ---------- Subtítulos dentro del formulario ----------
+.subtitulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 22px 0 12px;
+    padding-bottom: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: $primario-oscuro;
+    border-bottom: 1px dashed $borde;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+// ---------- Botones ----------
+.botonGuardar {
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    background: $primario;
+
+    &:hover,
+    &:focus {
+        background: $primario-oscuro;
+    }
+}
+
+.botonClave {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 12px;
+    color: #7a4a00;
+    background: transparent;
+    border: 2px solid $acento-clave;
+
+    &:hover,
+    &:focus {
+        color: #fff;
+        background: $acento-clave;
+        border-color: $acento-clave;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+}

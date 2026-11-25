@@ -1,0 +1,96 @@
+@use '../../utils/paleta' as *;
+
+.acordeon {
+    --bs-accordion-border-color: #{$borde};
+    --bs-accordion-border-radius: #{$radio};
+    --bs-accordion-inner-border-radius: #{$radio};
+    --bs-accordion-active-bg: #{$primario-suave};
+    --bs-accordion-active-color: #{$primario-profundo};
+    --bs-accordion-btn-focus-box-shadow: none;
+    box-shadow: $sombra;
+    border-radius: $radio;
+
+    :global(.accordion-item) {
+        background: $superficie;
+        margin-bottom: 12px;
+        border: 1px solid $borde;
+        border-left: 6px solid $primario;
+        border-radius: $radio !important;
+        overflow: hidden;
+    }
+
+    :global(.accordion-button) {
+        padding: 14px 16px;
+        font-weight: 600;
+        color: $texto;
+    }
+}
+
+.cabecera {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.nombre {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $primario-oscuro;
+}
+
+.resumen {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: $texto-suave;
+}
+
+.dia {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 8px 12px;
+    align-items: start;
+    padding: 8px 0;
+
+    & + & {
+        border-top: 1px solid $borde;
+    }
+}
+
+.diaNombre {
+    font-weight: 700;
+    color: $primario-profundo;
+}
+
+.franjas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.franja {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 8px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: $primario-suave;
+    color: $primario-profundo;
+    font-size: 0.85rem;
+    text-decoration: none;
+
+    &:hover {
+        background: $primario;
+        color: #fff;
+    }
+}
+
+.hora {
+    font-weight: 700;
+}
+
+.vacio {
+    color: $texto-suave;
+    margin: 0;
+}

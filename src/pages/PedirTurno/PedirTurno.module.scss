@@ -1,0 +1,287 @@
+@use '../../components/utils/paleta' as *;
+
+// ---------- Opciones grandes (especialidad, médico) ----------
+.lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+}
+
+.opcion {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 16px 18px;
+    text-align: left;
+    color: $texto;
+    background: $superficie;
+    border: 2px solid $borde;
+    border-left: 8px solid $primario;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    cursor: pointer;
+    transition: transform 0.12s, border-color 0.12s, background 0.12s;
+
+    &:hover {
+        transform: translateY(-2px);
+        border-color: $primario;
+        background: $primario-suave;
+    }
+
+    &:focus-visible {
+        outline: 3px solid $primario-profundo;
+        outline-offset: 3px;
+    }
+}
+
+.opcionIcono {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    color: #fff;
+    background: $primario;
+}
+
+.avatar {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: $primario-profundo;
+    background: $primario-suave;
+    box-shadow: 0 0 0 3px $primario;
+}
+
+.opcionTexto {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.opcionTitulo {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: $primario-profundo;
+    overflow-wrap: anywhere;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: $primario-profundo;
+    background: $primario-suave;
+}
+
+.flecha {
+    flex: 0 0 auto;
+    color: $primario;
+}
+
+// ---------- Elegir día y hora ----------
+.seccionTitulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0 12px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: $primario-oscuro;
+}
+
+.dias {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 26px;
+}
+
+.dia {
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: $primario-profundo;
+    background: $superficie;
+    border: 2px solid $primario;
+    border-radius: $radio;
+    cursor: pointer;
+    transition: background 0.12s;
+
+    small {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-transform: lowercase;
+        opacity: 0.85;
+    }
+
+    &:hover {
+        background: $primario-suave;
+    }
+
+    &:focus-visible {
+        outline: 3px solid $primario-profundo;
+        outline-offset: 3px;
+    }
+}
+
+.diaActivo {
+    color: #fff;
+    background: $primario;
+
+    &:hover {
+        background: $primario-oscuro;
+    }
+}
+
+.horas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 12px;
+}
+
+.hora {
+    padding: 14px 8px;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+    background: $primario;
+    border: none;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    cursor: pointer;
+    transition: transform 0.12s, background 0.12s;
+
+    small {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+        opacity: 0.9;
+    }
+
+    &:hover {
+        background: $primario-oscuro;
+        transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+        outline: 3px solid $primario-profundo;
+        outline-offset: 3px;
+    }
+}
+
+// Fila propia: así el botón "Volver" de PasoLayout queda debajo y no al costado
+.actualizarFila {
+    display: block;
+    margin: 22px 0 14px;
+}
+
+.actualizar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    font-weight: 700;
+    color: $primario-profundo;
+    background: transparent;
+    border: 2px solid $primario;
+    border-radius: 999px;
+    cursor: pointer;
+
+    &:hover {
+        background: $primario-suave;
+    }
+}
+
+// ---------- Confirmar ----------
+.resumen {
+    margin-bottom: 22px;
+    overflow: hidden;
+    border-radius: $radio;
+    background: $superficie;
+    box-shadow: $sombra;
+}
+
+.fila {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-bottom: 1px solid $borde;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.filaIcono {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    color: #fff;
+    background: $primario;
+}
+
+.filaEtiqueta {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $texto-suave;
+}
+
+.filaValor {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+
+    small {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: $texto-suave;
+    }
+}
+
+.confirmar {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    background: $primario;
+    border: none;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+        background: $primario-oscuro;
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: wait;
+    }
+}

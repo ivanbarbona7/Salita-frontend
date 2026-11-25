@@ -1,0 +1,77 @@
+@use '../utils/paleta' as *;
+
+.consulta {
+    background: $superficie;
+    border: 1px solid $borde;
+    border-left: 6px solid $primario;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    padding: 16px 18px;
+}
+
+.cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 6px 16px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $borde;
+}
+
+.fecha {
+    font-weight: 700;
+    color: $primario-oscuro;
+    text-transform: capitalize;
+}
+
+.medico {
+    color: $texto-suave;
+    font-size: 0.9rem;
+}
+
+.etiqueta {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: $texto-suave;
+}
+
+.texto {
+    margin: 2px 0 0;
+    white-space: pre-line;
+}
+
+.chip {
+    display: inline-block;
+    margin: 4px 6px 0 0;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: $primario-suave;
+    color: $primario-profundo;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.vacio {
+    color: $texto-suave;
+    font-style: italic;
+}
+
+.aviso {
+    background: $primario-suave;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    color: $primario-profundo;
+}
+
+.opciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    align-items: center;
+}

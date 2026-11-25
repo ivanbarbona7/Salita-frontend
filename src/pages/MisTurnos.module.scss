@@ -1,0 +1,157 @@
+@use '../components/utils/paleta' as *;
+
+.lista {
+    display: grid;
+    gap: 14px;
+    margin-top: 16px;
+}
+
+// Tarjeta de turno: franja de color a la izquierda según el estado
+.tarjeta {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: $superficie;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    border-left: 6px solid $primario;
+}
+
+.proximoDestacado {
+    border-left-width: 8px;
+    background: $primario-suave;
+}
+
+.atendido { border-left-color: #2e8b57; }
+.cancelado { border-left-color: #9aa5a3; }
+.noAsistio { border-left-color: #343a40; }
+
+.etiquetaProximo {
+    margin: 0 0 4px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $primario-profundo;
+}
+
+// Bloque de fecha: día grande, fácil de leer de un vistazo
+.fecha {
+    flex: 0 0 auto;
+    width: 74px;
+    padding: 8px 4px;
+    text-align: center;
+    border-radius: 12px;
+    background: $primario-suave;
+    color: $primario-profundo;
+    line-height: 1.1;
+    align-self: flex-start;
+}
+
+.proximoDestacado .fecha {
+    background: $primario;
+    color: #fff;
+}
+
+.diaSemana {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.diaNumero {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.mes {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.cuerpo {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.hora {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: $primario-oscuro;
+}
+
+.insignias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.especialidad {
+    margin: 2px 0 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.medico {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.lugar {
+    margin: 2px 0 0;
+    font-size: 0.95rem;
+    color: $texto-suave;
+}
+
+.acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.nota {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 0.92rem;
+    color: $texto-suave;
+}
+
+// En el celular los botones ocupan todo el ancho (más fáciles de tocar)
+@media (max-width: 575px) {
+    .tarjeta {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .fecha {
+        width: auto;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 8px;
+        padding: 6px 10px;
+        align-self: stretch;
+    }
+
+    .diaNumero {
+        display: inline;
+        font-size: 1.5rem;
+    }
+
+    .acciones > button {
+        flex: 1 1 100%;
+    }
+}

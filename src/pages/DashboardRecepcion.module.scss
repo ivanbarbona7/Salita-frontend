@@ -1,0 +1,38 @@
+.botonPrincipal {
+    background: #1fb5a5;
+    border-color: #1fb5a5;
+    color: #fff;
+
+    &:hover,
+    &:focus {
+        background: #12877b;
+        border-color: #12877b;
+        color: #fff;
+    }
+}
+.opcion:global(.btn) {
+    --bs-btn-color: #12877b;
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: #1fb5a5;
+    --bs-btn-hover-color: #0e6b61;
+    --bs-btn-hover-bg: #e3f6f3;
+    --bs-btn-hover-border-color: #1fb5a5;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #12877b;
+    --bs-btn-active-border-color: #12877b;
+    --bs-btn-disabled-color: #7fb9b2;
+    --bs-btn-disabled-bg: #fff;
+    --bs-btn-disabled-border-color: #b7e3de;
+}
+
+.opcionActiva:global(.btn) {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #12877b;
+    --bs-btn-border-color: #12877b;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #0e6b61;
+    --bs-btn-hover-border-color: #0e6b61;
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #12877b;
+    --bs-btn-disabled-border-color: #12877b;
+}

@@ -1,0 +1,202 @@
+@use '../components/utils/paleta' as *;
+
+.contenedor {
+    display: grid;
+    gap: 24px;
+}
+
+// ---------- Presentación ----------
+.marca {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 26px 18px;
+    text-align: center;
+    color: #fff;
+    border-radius: $radio;
+    background: linear-gradient(135deg, $primario 0%, $primario-oscuro 100%);
+    box-shadow: $sombra;
+}
+
+.logo {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    color: $primario-profundo;
+    background: #fff;
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.nombre {
+    margin: 0;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 800;
+}
+
+.lema {
+    margin: 0;
+    font-size: 1.1rem;
+    opacity: 0.95;
+}
+
+// ---------- Acciones ----------
+.acciones {
+    display: grid;
+    gap: 14px;
+}
+
+.principal {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 20px;
+    text-align: left;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    border: none;
+    border-radius: $radio;
+    background: $primario;
+    box-shadow: $sombra;
+    cursor: pointer;
+    transition: transform 0.12s, background 0.12s;
+
+    &:hover {
+        background: $primario-oscuro;
+        transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+        outline: 3px solid $primario-profundo;
+        outline-offset: 3px;
+    }
+
+    small {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 500;
+        opacity: 0.9;
+    }
+}
+
+.principalIcono {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.secundaria {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $primario-profundo;
+    background: $superficie;
+    border: 2px solid $primario;
+    border-radius: $radio;
+    cursor: pointer;
+    transition: background 0.12s;
+
+    &:hover {
+        background: $primario-suave;
+    }
+
+    &:focus-visible {
+        outline: 3px solid $primario-profundo;
+        outline-offset: 3px;
+    }
+}
+
+// ---------- Cómo funciona ----------
+.pasosTitulo {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $primario-oscuro;
+    text-align: center;
+}
+
+.pasos {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.paso {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: $primario-suave;
+}
+
+.pasoNumero {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-weight: 800;
+    color: #fff;
+    background: $primario;
+}
+
+.pasoTexto {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: $primario-profundo;
+}
+
+// ---------- Ayuda / datos de la salita ----------
+.ayuda {
+    padding: 16px 18px;
+    text-align: center;
+    border-radius: $radio;
+    border: 1px dashed $primario;
+    background: $superficie;
+}
+
+.ayudaTitulo {
+    margin: 0 0 6px;
+    font-weight: 700;
+    color: $primario-oscuro;
+}
+
+.ayudaTexto {
+    margin: 0;
+    color: $texto-suave;
+}
+
+.datos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 18px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+    color: $texto;
+}
+
+.dato {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}

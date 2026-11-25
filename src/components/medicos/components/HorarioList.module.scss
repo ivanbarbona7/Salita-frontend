@@ -1,0 +1,57 @@
+@use '../../utils/Paleta' as *;
+
+// Pestañas "Por médico" / "Por consultorio": estilo botón, con la paleta del proyecto
+.pestanas {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 6px;
+    margin-bottom: 20px !important;
+    width: fit-content;
+    max-width: 100%;
+    background: $superficie;
+    border: 1px solid $borde !important;
+    border-radius: 999px;
+    box-shadow: $sombra;
+
+    :global(.nav-item) {
+        flex: 1 1 auto;
+    }
+
+    :global(.nav-link) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 8px 20px;
+        border: none !important;
+        border-radius: 999px !important;
+        color: $texto-suave;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: background 0.15s, color 0.15s;
+
+        &:hover {
+            background: $primario-suave;
+            color: $primario-profundo;
+        }
+
+        &:global(.active) {
+            background: $primario;
+            color: #fff;
+        }
+    }
+}
+
+// En celular las pestañas ocupan todo el ancho
+@media (max-width: 575.98px) {
+    .pestanas {
+        width: 100%;
+
+        :global(.nav-link) {
+            padding: 8px 10px;
+            font-size: 0.9rem;
+        }
+    }
+}
