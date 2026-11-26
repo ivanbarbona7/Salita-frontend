@@ -10,7 +10,7 @@ import { ArrowLeft, Envelope, Eye, EyeSlash, HeartPulseFill, Lock, Person } from
 import { isAxiosError } from "axios";
 import { obtenerRol, rutaInicio  } from "../components/utils/sesion.tsx";
 import formulario from "../components/utils/Formulario.module.scss";
-import styles from "./Login.module.scss";
+import styles from "./login.module.scss";
 
 const loginSchema = z.object({
     email: z.email("Formato de email invalido"),

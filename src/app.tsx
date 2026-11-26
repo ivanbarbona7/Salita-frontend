@@ -30,7 +30,7 @@ import AusenciasMedico from './pages/AusenciaMedico.tsx';
 import PacienteList from './components/pacientes/PacientesList.tsx';
 import PacienteDetalle from './components/pacientes/PacienteDetalle.tsx';
 import PacienteEditar from './components/pacientes/PacienteEditar.tsx';
-import FormularioPaciente from './components/pacientes/FormularioPaciente.js';
+import FormularioPaciente from './components/pacientes/FormularioPaciente.tsx';
 import HistoriaClinica from './components/historiaClinica/FormularioHistoriaClinica.tsx';
 import FormularioTurno from './components/turnos/FormularioTurno.tsx';
 import DetalleTurno from './components/turnos/DetalleTurno.tsx';
