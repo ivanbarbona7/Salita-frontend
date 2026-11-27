@@ -89,14 +89,18 @@ export const App = () => (
             <Route path="/historia-clinica/:id" element={<HistoriaClinica />} />
           </Route>
 
+          {/* Pacientes: admin, recepción y médico (lista, detalle y edición) */}
+          <Route element={<RutaProtegida roles={['ADMIN', 'RECEPCIONISTA', 'MEDICO']} />}>
+            <Route path="/pacientes" element={<PacienteList />} />
+            <Route path="/pacientes/:id" element={<PacienteDetalle />} />
+            <Route path="/pacientes/editar/:id" element={<PacienteEditar />} />
+          </Route>
+
           {/* Admin y recepción */}
           <Route element={<RutaProtegida roles={['ADMIN', 'RECEPCIONISTA']} />}>
             <Route path="/recepcion" element={<DashboardRecepcion />} />
-            <Route path="/pacientes" element={<PacienteList />} />
-            <Route path="/pacientes/:id" element={<PacienteDetalle />} />
             <Route path="/consultorios" element={<ConsultorioList />} />
             <Route path="/nuevo-paciente" element={<FormularioPaciente />} />
-            <Route path="/pacientes/editar/:id" element={<PacienteEditar />} />
             <Route path="/turnos" element={<FormularioTurno />} />
             <Route path="/turnos/:id" element={<FormularioTurno />} />
             <Route path="/turno-detalle/:id" element={<DetalleTurno />} />

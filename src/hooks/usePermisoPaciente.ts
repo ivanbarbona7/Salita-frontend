@@ -6,7 +6,7 @@ export const usePermisosPaciente = () => {
 
     return {
         verHistoria: rol === 'ADMIN' || rol === 'MEDICO',
-        editar: rol === 'ADMIN' || rol === 'RECEPCIONISTA',
+        editar: rol === 'ADMIN' || rol === 'RECEPCIONISTA' || rol === 'MEDICO',
         // Desactivar y reactivar (no existe borrado definitivo desde la app)
         desactivar: rol === 'ADMIN' || rol === 'RECEPCIONISTA',
         // DNI, email, usuario y contraseña: datos de la cuenta de acceso

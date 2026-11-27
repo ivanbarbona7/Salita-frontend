@@ -13,7 +13,7 @@ export const MENU: IItemMenu[] = [
     { ruta: "/recepcion", etiqueta: "Inicio", roles: GESTION },
     { ruta: "/inicio", etiqueta: "Inicio", roles: ["MEDICO"] },
     { ruta: "/mis-turnos", etiqueta: "Mis turnos", roles: ["MEDICO"] },
-    { ruta: "/pacientes", etiqueta: "Pacientes", roles: GESTION },
+    { ruta: "/pacientes", etiqueta: "Pacientes", roles:  [...GESTION, "MEDICO"] },
     { ruta: "/turnos", etiqueta: "Turno nuevo", roles: GESTION },
     { ruta: "/lista-espera", etiqueta: "Lista de espera", roles: GESTION },
     { ruta: "/medicos", etiqueta: "Médicos", roles: GESTION },
