@@ -1,9 +1,20 @@
-import { Alert, Button, Card, ListGroup, Stack } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import {
+  BoxArrowRight,
+  Calendar3,
+  CameraFill,
+  CheckCircleFill,
+  GeoAltFill,
+  HeartPulseFill,
+  HouseDoor,
+  PersonFill,
+} from 'react-bootstrap-icons';
 import { PasoLayout } from '../components/PasoLayout';
 import { cerrarSesion, esIngresoRapido } from '../components/utils/sesion';
 import { formatearTurno } from '../components/utils/fecha';
 import { confirmacionSchema, direccionTexto } from '../types/TurnosPaciente.types';
+import styles from './TurnoConfirmado.module.scss';
 
 // Comprobante. "Terminar y salir" cierra la sesión, para que no quede abierta en una compu compartida.
 export const TurnoConfirmado = () => {
@@ -21,29 +32,68 @@ export const TurnoConfirmado = () => {
 
   return (
     <PasoLayout titulo="¡Turno confirmado!" sinVolver>
-      <Alert variant="success" className="fs-5">
-        Anotá estos datos o sacale una foto a la pantalla.
-      </Alert>
+      <div className={styles.contenedor}>
+        <div className={styles.encabezado}>
+          <CheckCircleFill className={styles.iconoExito} aria-hidden="true" />
+          <p className={styles.subtitulo}>Tu turno quedó reservado. Te esperamos.</p>
+        </div>
 
-      <Card className="mb-4">
-        <ListGroup variant="flush" className="fs-5">
-          <ListGroup.Item><strong>Especialidad:</strong> {especialidad.nombre}</ListGroup.Item>
-          <ListGroup.Item><strong>Médico:</strong> {medico.apellido}, {medico.nombre}</ListGroup.Item>
-          <ListGroup.Item><strong>Cuándo:</strong> {formatearTurno(horario.inicio)} hs</ListGroup.Item>
-          <ListGroup.Item>
-            <strong>Dónde:</strong> {horario.consultorio.nombre}
-            <small className="d-block text-muted">{direccionTexto(horario.consultorio)}</small>
-          </ListGroup.Item>
-        </ListGroup>
-      </Card>
+        <div className={styles.aviso} role="note">
+          <CameraFill className={styles.avisoIcono} aria-hidden="true" />
+          <span>Anotá estos datos o sacale una foto a la pantalla.</span>
+        </div>
 
-      <Stack gap={3}>
-        <Button size="lg" className="py-3 fs-4" onClick={terminar}>Terminar y salir</Button>
-        {!esIngresoRapido() && (
-          <Button variant="outline-primary" size="lg" onClick={() => navigate('/pacientes/turnos')}>Ver mis turnos</Button>
-        )}
-        <Button variant="link" onClick={() => navigate('/pacientes/inicio')}>Volver al inicio</Button>
-      </Stack>
+        <Card className={styles.comprobante}>
+          <div className={styles.fila}>
+            <HeartPulseFill className={styles.filaIcono} aria-hidden="true" />
+            <div>
+              <span className={styles.etiqueta}>Especialidad</span>
+              <span className={styles.valor}>{especialidad.nombre}</span>
+            </div>
+          </div>
+
+          <div className={styles.fila}>
+            <PersonFill className={styles.filaIcono} aria-hidden="true" />
+            <div>
+              <span className={styles.etiqueta}>Médico</span>
+              <span className={styles.valor}>{medico.apellido}, {medico.nombre}</span>
+            </div>
+          </div>
+
+          <div className={styles.fila}>
+            <Calendar3 className={styles.filaIcono} aria-hidden="true" />
+            <div>
+              <span className={styles.etiqueta}>Cuándo</span>
+              <span className={styles.valor}>{formatearTurno(horario.inicio)} hs</span>
+            </div>
+          </div>
+
+          <div className={styles.fila}>
+            <GeoAltFill className={styles.filaIcono} aria-hidden="true" />
+            <div>
+              <span className={styles.etiqueta}>Dónde</span>
+              <span className={styles.valor}>{horario.consultorio.nombre}</span>
+              <span className={styles.direccion}>{direccionTexto(horario.consultorio)}</span>
+            </div>
+          </div>
+        </Card>
+
+        <div className={styles.acciones}>
+          <Button variant="none" className={styles.botonPrincipal} onClick={terminar}>
+            <BoxArrowRight aria-hidden="true" /> Terminar y salir
+          </Button>
+
+          {!esIngresoRapido() && (
+            <Button variant="none" className={styles.botonSecundario} onClick={() => navigate('/pacientes/turnos')}>
+              <Calendar3 aria-hidden="true" /> Ver mis turnos
+            </Button>
+          )}
+
+          <Button variant="none" className={styles.botonTerciario} onClick={() => navigate('/pacientes/inicio')}>
+            <HouseDoor aria-hidden="true" /> Volver al inicio
+          </Button>
+        </div>
+      </div>
     </PasoLayout>
   );
 };

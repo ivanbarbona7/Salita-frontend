@@ -1,0 +1,219 @@
+// Paleta verde agua de la app
+$verde: #1fb5a5;
+$verde-oscuro: #12877b;
+$verde-profundo: #0e6b61;
+$texto: #212529;
+$texto-suave: #6c757d;
+$borde: #e9ecef;
+
+.contenedor {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+// Encabezado con el tilde de éxito
+.encabezado {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.iconoExito {
+  font-size: 4.5rem;
+  color: $verde;
+  animation: aparecer 0.4s ease-out;
+}
+
+.subtitulo {
+  margin: 0.75rem 0 0;
+  font-size: 1.2rem;
+  color: #495057;
+}
+
+// Aviso de "sacale una foto"
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.75rem;
+  background: rgba($verde, 0.1);
+  border-left: 5px solid $verde;
+  color: $verde-profundo;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.avisoIcono {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+// Comprobante del turno
+.comprobante {
+  border: none;
+  border-top: 6px solid $verde;
+  border-radius: 1rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.fila {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid $borde;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.filaIcono {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+  font-size: 1.5rem;
+  color: $verde-oscuro;
+}
+
+.etiqueta {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $texto-suave;
+}
+
+.valor {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: $texto;
+}
+
+.direccion {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 1rem;
+  color: $texto-suave;
+}
+
+// Botones: grandes y fáciles de tocar, en orden de importancia
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+%boton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  border-radius: 0.75rem;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba($verde, 0.5);
+    outline-offset: 2px;
+  }
+}
+
+.botonPrincipal {
+  @extend %boton;
+  padding: 1rem;
+  border: none;
+  background: $verde;
+  color: #fff;
+  font-size: 1.35rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba($verde, 0.35);
+
+  &:hover,
+  &:focus {
+    background: $verde-oscuro;
+    color: #fff;
+  }
+
+  &:active {
+    background: $verde-profundo;
+    color: #fff;
+  }
+}
+
+.botonSecundario {
+  @extend %boton;
+  padding: 0.85rem;
+  border: 2px solid $verde;
+  background: #fff;
+  color: $verde-oscuro;
+  font-size: 1.2rem;
+  font-weight: 600;
+
+  &:hover,
+  &:focus {
+    background: rgba($verde, 0.1);
+    border-color: $verde-oscuro;
+    color: $verde-profundo;
+  }
+}
+
+.botonTerciario {
+  @extend %boton;
+  padding: 0.7rem;
+  border: none;
+  background: transparent;
+  color: #495057;
+  font-size: 1.1rem;
+  font-weight: 500;
+
+  &:hover,
+  &:focus {
+    background: #f1f3f5;
+    color: $verde-profundo;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iconoExito {
+    animation: none;
+  }
+}
+
+// Celulares chicos
+@media (max-width: 400px) {
+  .fila {
+    padding: 0.9rem 1rem;
+  }
+
+  .valor {
+    font-size: 1.15rem;
+  }
+}
+
+// Si lo imprimen, sale solo el comprobante
+@media print {
+  .acciones,
+  .aviso {
+    display: none;
+  }
+}
