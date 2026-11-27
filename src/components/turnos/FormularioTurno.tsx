@@ -7,7 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import clientesAxios from '../../config/axios';
 import { useFetch } from '../../hooks/useFetch';
-import type { IEspecialidad } from '../../types/Especialidad.types';
 import { obtenerMensajeError } from '../utils/obtenerMensajeError';
 import { claveLocal, etiquetaDia, formatearTurno, sumarDias } from '../utils/fecha';
 import styles from '../utils/Formulario.module.scss';
@@ -15,7 +14,6 @@ import {
     CrearTurnoSchema,
     type ICrearTurnoDTO,
     type ICrearTurnoValidado,
-    type IDisponibilidad,
 } from '../../types/Turno.Types';
 import { DIAS_SEMANA } from '../../types/Horario.types';
 import type { IConsultorio } from '../../types/Consultorio.types';
@@ -27,6 +25,17 @@ type BusquedaPaciente =
     | { estado: 'buscando' }
     | { estado: 'encontrado'; paciente: IPacienteLista }
     | { estado: 'error'; mensaje: string };
+
+// Horarios libres de un médico en un día, de todos sus consultorios (GET /turnos/horarios-medico)
+interface IHorarioMedico {
+    inicio: string; // ISO en UTC: se envía tal cual al crear el turno
+    hora: string;   // "08:20", en hora argentina
+    consultorio: { id: string; nombre: string };
+}
+interface IDisponibilidadMedico {
+    duracionTurno: number;
+    horarios: IHorarioMedico[];
+}
 
 type CampoTexto = 'consultorio' | 'especialidad' | 'medico' | 'fecha' | 'fechaTurno' | 'fechaUrgencia';
 
@@ -65,70 +74,65 @@ const FormularioTurno = () => {
     const fecha = watch('fecha');
     const fechaTurno = watch('fechaTurno');
 
+    // Turno normal: el consultorio es solo un filtro opcional (para quien sabe dónde atiende el médico).
+    // Si no se elige, el consultorio lo define el horario que se elija.
+    const [filtroConsultorio, setFiltroConsultorio] = useState('');
+
     // Cada paso depende del anterior: al cambiar uno, los siguientes se limpian
     const limpiar = (...campos: CampoTexto[]) => campos.forEach((campo) => setValue(campo, ''));
 
-    // 1) Consultorios activos
+    // Consultorios activos
     const { data: consultorios, isLoading: cargandoConsultorios } = useFetch<IConsultorio[]>('/consultorios?activo=true');
 
-    // 2) Médicos activos. Turno normal: los que atienden en el consultorio elegido.
-    //    Urgencia: todos los de la especialidad elegida, atiendan o no en ese consultorio.
-    const endpointMedicos = urgencia
-        ? especialidadId ? `/medicos?especialidad=${especialidadId}&activo=true` : null
-        : consultorioId ? `/medicos?consultorio=${consultorioId}&activo=true` : null;
-    const { data: medicos, isLoading: cargandoMedicos } = useFetch<IMedico[]>(endpointMedicos);
+    // Médicos activos. De acá salen las especialidades y los médicos de cada una.
+    const { data: todosLosMedicos, isLoading: cargandoMedicos } = useFetch<IMedico[]>('/medicos?activo=true');
 
-    // 3) Horarios libres del médico en ese consultorio y día (solo turno normal)
-    const { data: disponibilidad, isLoading: cargandoHorarios } = useFetch<IDisponibilidad>(
-        !urgencia && medicoId && consultorioId && fecha
-            ? `/turnos/disponibilidad?medico=${medicoId}&consultorio=${consultorioId}&fecha=${fecha}`
-            : null,
+    // Horarios libres del médico en ese día, de todos sus consultorios (solo turno normal)
+    const { data: disponibilidad, isLoading: cargandoHorarios } = useFetch<IDisponibilidadMedico>(
+        !urgencia && medicoId && fecha ? `/turnos/horarios-medico?medico=${medicoId}&fecha=${fecha}` : null,
     );
 
     // ---- Lo que se ofrece en cada paso ----
-    const consultorioElegido = (consultorios ?? []).find((c) => c.id === consultorioId);
-    const listaMedicos = cargandoMedicos ? [] : medicos ?? [];
+    const nombreConsultorio = new Map((consultorios ?? []).map((c) => [c.id, c.nombre]));
+    const franjasDe = (m: IMedico) =>
+        (m.horarioAtencion?.franjas ?? []).filter((f) => nombreConsultorio.has(f.consultorio));
 
-    // Turno normal: solo médicos que tienen horario cargado en este consultorio
-    const medicosDelConsultorio = (consultorioId ? listaMedicos : []).filter((m) =>
-        (m.horarioAtencion?.franjas ?? []).some((f) => f.consultorio === consultorioId),
-    );
+    // Turno normal: solo médicos con horario cargado en algún consultorio activo. Urgencia: todos.
+    const medicosDisponibles = (todosLosMedicos ?? []).filter((m) => urgencia || franjasDe(m).length > 0);
 
-    // Turno normal: especialidades del consultorio que tienen al menos un médico atendiendo ahí.
-    // Urgencia: todas las del consultorio.
-    // Un consultorio marcado "atiende todas" no tiene lista propia: en turno normal salen las de los médicos
-    // que atienden ahí; en urgencia, todas las especialidades.
-    const todasEnConsultorio = consultorioElegido?.todasLasEspecialidades === true;
-    const { data: todasLasEsp } = useFetch<IEspecialidad[]>(urgencia && todasEnConsultorio ? '/especialidades' : null);
-    const especialidadesDeMedicos = [
+    const especialidadesDisponibles = [
         ...new Map(
-            medicosDelConsultorio
+            medicosDisponibles
                 .filter((m) => m.especialidad)
-                .map((m) => [String(m.especialidad.id), { id: m.especialidad.id, nombre: m.especialidad.nombre }]),
+                .map((m) => [String(m.especialidad.id), { id: String(m.especialidad.id), nombre: m.especialidad.nombre }]),
         ).values(),
-    ];
-    const especialidadesDelConsultorio: Pick<IEspecialidad, 'id' | 'nombre'>[] = todasEnConsultorio
-        ? urgencia ? todasLasEsp ?? [] : especialidadesDeMedicos
-        : consultorioElegido?.especialidades ?? [];
-    const especialidadesDisponibles = urgencia
-        ? especialidadesDelConsultorio
-        : especialidadesDelConsultorio.filter((esp) =>
-              medicosDelConsultorio.some((m) => String(m.especialidad?.id) === String(esp.id)),
-          );
+    ].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
 
-    const medicosElegibles = urgencia
-        ? especialidadId ? listaMedicos : []
-        : medicosDelConsultorio.filter((m) => String(m.especialidad?.id) === especialidadId);
+    const medicosElegibles = medicosDisponibles
+        .filter((m) => String(m.especialidad?.id) === especialidadId)
+        .sort((a, b) => `${a.apellido} ${a.nombre}`.localeCompare(`${b.apellido} ${b.nombre}`, 'es'));
     const medicoElegido = medicosElegibles.find((m) => m.id === medicoId);
 
-    // Turno normal: días de la semana en que el médico atiende en este consultorio
-    const diasQueAtiende = [
-        ...new Set(
-            (medicoElegido?.horarioAtencion?.franjas ?? [])
-                .filter((f) => f.consultorio === consultorioId)
-                .map((f) => f.diaSemana),
-        ),
-    ];
+    // Turno normal: consultorios donde atiende el médico elegido (para el filtro opcional)
+    const consultoriosDelMedico = medicoElegido
+        ? [...new Set(franjasDe(medicoElegido).map((f) => f.consultorio))]
+              .map((id) => ({ id, nombre: nombreConsultorio.get(id) ?? '' }))
+              .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
+        : [];
+    const variosConsultorios = consultoriosDelMedico.length > 1;
+
+    // Urgencia: cualquier consultorio que atienda la especialidad elegida
+    const consultoriosUrgencia = (consultorios ?? []).filter(
+        (c) =>
+            c.todasLasEspecialidades === true ||
+            (c.especialidades ?? []).some((esp) => String(esp.id) === especialidadId),
+    );
+
+    // Turno normal: días de la semana en que el médico atiende (en el consultorio filtrado, si se eligió uno)
+    const franjasConsiderar = medicoElegido
+        ? franjasDe(medicoElegido).filter((f) => !filtroConsultorio || f.consultorio === filtroConsultorio)
+        : [];
+    const diasQueAtiende = [...new Set(franjasConsiderar.map((f) => f.diaSemana))];
     const nombresDias = DIAS_SEMANA.filter((d) => diasQueAtiende.includes(d.valor)).map((d) => d.etiqueta.toLowerCase());
     const diaDeLaSemana = (clave: string) => new Date(`${clave}T12:00:00`).getDay();
     const diaElegidoAtiende = !fecha || diasQueAtiende.includes(diaDeLaSemana(fecha));
@@ -138,7 +142,13 @@ const FormularioTurno = () => {
         .filter((dia) => diasQueAtiende.includes(diaDeLaSemana(dia)))
         .slice(0, 8);
 
-    const horarios = disponibilidad?.horarios ?? [];
+    // Si se filtró por consultorio, solo sus horarios
+    const horarios = (disponibilidad?.horarios ?? []).filter(
+        (h) => !filtroConsultorio || h.consultorio.id === filtroConsultorio,
+    );
+    const horarioElegido = horarios.find((h) => h.inicio === fechaTurno);
+    // Turno normal: el consultorio sale del horario elegido. Urgencia: el que se eligió en la lista.
+    const consultorioResumen = urgencia ? nombreConsultorio.get(consultorioId) : horarioElegido?.consultorio.nombre;
 
     // ---- Búsqueda del paciente por DNI ----
     const buscarPaciente = async () => {
@@ -241,8 +251,8 @@ const FormularioTurno = () => {
                             <strong>{urgencia ? 'Urgencia (ingreso por guardia)' : 'Turno programado'}</strong>
                             <span>
                                 {urgencia
-                                    ? 'Podés usar cualquier consultorio con la especialidad y cualquier médico de ella. El horario no tiene que estar en su agenda, pero no puede superponerse con otro turno del médico.'
-                                    : 'Solo se ofrecen consultorios, médicos y horarios que existen en la agenda.'}
+                                    ? 'Podés elegir cualquier médico de la especialidad y cualquier consultorio que la atienda. El horario no tiene que estar en su agenda, pero no puede superponerse con otro turno del médico.'
+                                    : 'Solo se ofrecen médicos y horarios que existen en la agenda. El consultorio lo define el horario elegido.'}
                             </span>
                         </div>
                         <div className={`form-check form-switch ${styles.interruptor}`}>
@@ -252,7 +262,10 @@ const FormularioTurno = () => {
                                 role="switch"
                                 className="form-check-input"
                                 {...register('urgencia', {
-                                    onChange: () => limpiar('consultorio', 'especialidad', 'medico', 'fecha', 'fechaTurno', 'fechaUrgencia'),
+                                    onChange: () => {
+                                        limpiar('consultorio', 'especialidad', 'medico', 'fecha', 'fechaTurno', 'fechaUrgencia');
+                                        setFiltroConsultorio('');
+                                    },
                                 })}
                             />
                             <label htmlFor="urgencia" className="form-check-label">
@@ -313,53 +326,33 @@ const FormularioTurno = () => {
                         )}
                     </fieldset>
 
-                    {/* 2. CONSULTORIO -> ESPECIALIDAD -> MÉDICO */}
+                    {/* 2. ESPECIALIDAD -> MÉDICO -> CONSULTORIO */}
                     <fieldset className={styles.seccion}>
                         <legend className={styles.seccionTitulo}>Atención</legend>
                         <p className={styles.ayuda}>
-                            Elegí en este orden: cada opción se filtra según la anterior, así no se puede cargar una
-                            combinación que no existe.
+                            {urgencia
+                                ? 'Elegí la especialidad, el médico y el consultorio donde se atiende.'
+                                : 'Elegí la especialidad y el médico. El consultorio es opcional: si no lo sabés, se define con el horario que elijas.'}
                         </p>
 
                         <div className={styles.grilla3}>
                             <div className={styles.campo}>
-                                <label htmlFor="consultorio" className={styles.label}>1. Consultorio</label>
-                                <select
-                                    id="consultorio"
-                                    className={styles.campoInput}
-                                    aria-invalid={errors.consultorio ? true : undefined}
-                                    {...register('consultorio', {
-                                        onChange: () => limpiar('especialidad', 'medico', 'fecha', 'fechaTurno', 'fechaUrgencia'),
-                                    })}
-                                >
-                                    <option value="">Seleccioná...</option>
-                                    {(consultorios ?? []).map((c) => (
-                                        <option key={c.id} value={c.id}>{c.nombre}</option>
-                                    ))}
-                                </select>
-                                {errors.consultorio && (
-                                    <span className={styles.textError} role="alert">{errors.consultorio.message}</span>
-                                )}
-                            </div>
-
-                            <div className={styles.campo}>
-                                <label htmlFor="especialidad" className={styles.label}>2. Especialidad</label>
+                                <label htmlFor="especialidad" className={styles.label}>1. Especialidad</label>
                                 <select
                                     id="especialidad"
                                     className={styles.campoInput}
-                                    disabled={!consultorioId || (!urgencia && cargandoMedicos)}
+                                    disabled={cargandoMedicos}
                                     aria-invalid={errors.especialidad ? true : undefined}
                                     {...register('especialidad', {
-                                        onChange: () => limpiar('medico', 'fecha', 'fechaTurno', 'fechaUrgencia'),
+                                        onChange: () => {
+                                            limpiar('medico', 'consultorio', 'fecha', 'fechaTurno', 'fechaUrgencia');
+                                            setFiltroConsultorio('');
+                                        },
                                     })}
                                 >
-                                    <option value="">
-                                        {!consultorioId
-                                            ? 'Primero el consultorio'
-                                            : !urgencia && cargandoMedicos ? 'Cargando...' : 'Seleccioná...'}
-                                    </option>
+                                    <option value="">{cargandoMedicos ? 'Cargando...' : 'Seleccioná...'}</option>
                                     {especialidadesDisponibles.map((esp) => (
-                                        <option key={esp.id} value={String(esp.id)}>{esp.nombre}</option>
+                                        <option key={esp.id} value={esp.id}>{esp.nombre}</option>
                                     ))}
                                 </select>
                                 {errors.especialidad && (
@@ -368,17 +361,20 @@ const FormularioTurno = () => {
                             </div>
 
                             <div className={styles.campo}>
-                                <label htmlFor="medico" className={styles.label}>3. Médico</label>
+                                <label htmlFor="medico" className={styles.label}>2. Médico</label>
                                 <select
                                     id="medico"
                                     className={styles.campoInput}
-                                    disabled={!especialidadId || cargandoMedicos}
+                                    disabled={!especialidadId}
                                     aria-invalid={errors.medico ? true : undefined}
-                                    {...register('medico', { onChange: () => limpiar('fecha', 'fechaTurno', 'fechaUrgencia') })}
+                                    {...register('medico', {
+                                        onChange: () => {
+                                            limpiar('consultorio', 'fecha', 'fechaTurno', 'fechaUrgencia');
+                                            setFiltroConsultorio('');
+                                        },
+                                    })}
                                 >
-                                    <option value="">
-                                        {!especialidadId ? 'Primero la especialidad' : cargandoMedicos ? 'Cargando...' : 'Seleccioná...'}
-                                    </option>
+                                    <option value="">{!especialidadId ? 'Primero la especialidad' : 'Seleccioná...'}</option>
                                     {medicosElegibles.map((m) => (
                                         <option key={m.id} value={m.id}>{m.apellido}, {m.nombre}</option>
                                     ))}
@@ -387,12 +383,54 @@ const FormularioTurno = () => {
                                     <span className={styles.textError} role="alert">{errors.medico.message}</span>
                                 )}
                             </div>
+
+                            {urgencia ? (
+                                <div className={styles.campo}>
+                                    <label htmlFor="consultorio" className={styles.label}>3. Consultorio</label>
+                                    <select
+                                        id="consultorio"
+                                        className={styles.campoInput}
+                                        disabled={!medicoId}
+                                        aria-invalid={errors.consultorio ? true : undefined}
+                                        {...register('consultorio')}
+                                    >
+                                        <option value="">{!medicoId ? 'Primero el médico' : 'Seleccioná...'}</option>
+                                        {consultoriosUrgencia.map((c) => (
+                                            <option key={c.id} value={c.id}>{c.nombre}</option>
+                                        ))}
+                                    </select>
+                                    {errors.consultorio && (
+                                        <span className={styles.textError} role="alert">{errors.consultorio.message}</span>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className={styles.campo}>
+                                    <label htmlFor="filtro-consultorio" className={styles.label}>3. Consultorio (opcional)</label>
+                                    <select
+                                        id="filtro-consultorio"
+                                        className={styles.campoInput}
+                                        disabled={!medicoId}
+                                        value={filtroConsultorio}
+                                        onChange={(e) => {
+                                            setFiltroConsultorio(e.target.value);
+                                            limpiar('fecha', 'fechaTurno');
+                                        }}
+                                    >
+                                        <option value="">
+                                            {!medicoId ? 'Primero el médico' : variosConsultorios ? 'Cualquiera' : 'Se define con el horario'}
+                                        </option>
+                                        {variosConsultorios &&
+                                            consultoriosDelMedico.map((c) => (
+                                                <option key={c.id} value={c.id}>{c.nombre}</option>
+                                            ))}
+                                    </select>
+                                </div>
+                            )}
                         </div>
 
-                        {!urgencia && consultorioId && !cargandoMedicos && especialidadesDisponibles.length === 0 && (
+                        {!urgencia && !cargandoMedicos && especialidadesDisponibles.length === 0 && (
                             <p className={`${styles.ayuda} ${styles.separado}`}>
-                                Este consultorio todavía no tiene médicos con horario cargado. Cargalo desde "Horario de
-                                atención".
+                                Todavía no hay médicos con horario cargado. Cargalo desde "Horario de atención".
                             </p>
                         )}
                     </fieldset>
@@ -437,8 +475,8 @@ const FormularioTurno = () => {
                         ) : (
                             <>
                                 <p className={styles.ayuda}>
-                                    {medicoElegido.apellido}, {medicoElegido.nombre} atiende en este consultorio los{' '}
-                                    {nombresDias.join(', ')}.
+                                    {medicoElegido.apellido}, {medicoElegido.nombre} atiende los {nombresDias.join(', ')}
+                                    {filtroConsultorio ? ` en ${nombreConsultorio.get(filtroConsultorio) ?? 'ese consultorio'}` : ''}.
                                 </p>
 
                                 <div className={styles.grupoOpciones} aria-label="Próximos días disponibles">
@@ -473,7 +511,7 @@ const FormularioTurno = () => {
 
                                 {fecha && !diaElegidoAtiende && (
                                     <Alert variant="warning" className={styles.separado}>
-                                        El médico no atiende ese día en este consultorio. Atiende: {nombresDias.join(', ')}.
+                                        El médico no atiende ese día{filtroConsultorio ? ' en ese consultorio' : ''}. Atiende: {nombresDias.join(', ')}.
                                     </Alert>
                                 )}
 
@@ -486,14 +524,24 @@ const FormularioTurno = () => {
                                             </Placeholder>
                                         ) : horarios.length === 0 ? (
                                             <p className={styles.ayuda}>
-                                                No quedan horarios libres ese día. Probá con otra fecha.
+                                                No quedan horarios libres ese día{filtroConsultorio ? ' en ese consultorio' : ''}. Probá con otra fecha.
                                             </p>
                                         ) : (
                                             <div className={styles.grupoOpciones} role="radiogroup" aria-label="Horarios libres">
                                                 {horarios.map((h) => (
                                                     <label key={h.inicio} className={styles.chip}>
-                                                        <input type="radio" value={h.inicio} {...register('fechaTurno')} />
-                                                        <span>{h.hora}</span>
+                                                        <input
+                                                            type="radio"
+                                                            value={h.inicio}
+                                                            {...register('fechaTurno', {
+                                                                // El consultorio del turno es el del horario elegido
+                                                                onChange: () => setValue('consultorio', h.consultorio.id, { shouldValidate: true }),
+                                                            })}
+                                                        />
+                                                        <span>
+                                                            {h.hora}
+                                                            {variosConsultorios && <small> · {h.consultorio.nombre}</small>}
+                                                        </span>
                                                     </label>
                                                 ))}
                                             </div>
@@ -534,7 +582,7 @@ const FormularioTurno = () => {
                             <div className={styles.estadoTexto}>
                                 <strong>{urgencia ? 'Resumen de la urgencia' : 'Resumen del turno'}</strong>
                                 <span>
-                                    {busqueda.paciente.apellido}, {busqueda.paciente.nombre} · {consultorioElegido?.nombre} · Dr/a.{' '}
+                                    {busqueda.paciente.apellido}, {busqueda.paciente.nombre} · {consultorioResumen ?? 'Consultorio'} · Dr/a.{' '}
                                     {medicoElegido.apellido} · {formatearTurno(fechaTurno)} hs
                                 </span>
                             </div>
