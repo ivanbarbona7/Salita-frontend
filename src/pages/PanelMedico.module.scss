@@ -1,0 +1,65 @@
+@use '../components/utils/paleta' as *;
+
+// Encabezado de la lista de turnos: título con ícono y, debajo, el día en texto
+.encabezado {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.subtitulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: $primario-oscuro;
+
+    svg {
+        flex: 0 0 auto;
+        color: $primario;
+    }
+}
+
+.dia {
+    margin: 2px 0 0 34px; // alineado con el texto del título, no con el ícono
+    font-size: 0.95rem;
+    text-transform: capitalize;
+    color: $texto-suave;
+}
+
+// Barra de fecha de "Mis turnos": etiqueta y calendario en la misma línea
+.barraFecha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: $superficie;
+    border: 1px solid $borde;
+    border-radius: $radio;
+    box-shadow: $sombra;
+}
+
+.etiquetaFecha {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-weight: 700;
+    color: $primario-profundo;
+
+    svg {
+        color: $primario;
+    }
+}
+
+.campoFecha {
+    width: 100%;
+    max-width: 220px;
+}

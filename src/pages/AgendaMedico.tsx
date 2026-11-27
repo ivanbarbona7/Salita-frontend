@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { Form, Placeholder } from 'react-bootstrap';
+import { Placeholder } from 'react-bootstrap';
+import { CalendarEvent } from 'react-bootstrap-icons';
 import CampoFecha from '../components/utils/CampoFecha';
 import { useFetch } from '../hooks/useFetch';
 import ListaTurnosMedico from '../components/turnos/ListaTurnosMedico';
+import { tituloDia } from '../components/utils/fecha';
 import styles from '../components/utils/Formulario.module.scss';
+import panel from './PanelMedico.module.scss';
 import type { ITurnoMedico } from '../types/TurnoMedico.types';
 
 // Fecha de hoy en Argentina como AAAA-MM-DD
@@ -27,10 +30,20 @@ const AgendaMedico = () => {
         <div className={styles.pagina}>
             <div className={styles.contenedorFormulario}>
                 <h1 className={styles.titulo}>Mis turnos</h1>
-                <Form.Group className="mb-3" style={{ maxWidth: 240 }}>
-                    <Form.Label htmlFor="fecha-agenda">Fecha</Form.Label>
-                    <CampoFecha id="fecha-agenda" valor={fecha} onChange={(dia) => dia && setFecha(dia)} />
-                </Form.Group>
+
+                {/* Etiqueta y calendario en la misma línea */}
+                <div className={panel.barraFecha}>
+                    <label htmlFor="fecha-agenda" className={panel.etiquetaFecha}>
+                        <CalendarEvent size={18} aria-hidden="true" />
+                        Fecha
+                    </label>
+                    <div className={panel.campoFecha}>
+                        <CampoFecha id="fecha-agenda" valor={fecha} onChange={(dia) => dia && setFecha(dia)} />
+                    </div>
+                </div>
+
+                <p className={`${panel.dia} mb-3`} style={{ marginLeft: 0 }}>{tituloDia(fecha)}</p>
+
                 {/* key: al cambiar de fecha se monta de nuevo y no queda la lista del día anterior */}
                 <TurnosDelDia key={fecha} fecha={fecha} />
             </div>

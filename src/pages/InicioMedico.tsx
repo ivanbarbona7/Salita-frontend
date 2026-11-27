@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Col, Row } from 'react-bootstrap';
-import { CalendarWeek } from 'react-bootstrap-icons';
+import { CalendarCheck, CalendarWeek } from 'react-bootstrap-icons';
 import { useFetch } from '../hooks/useFetch';
 import TarjetaResumen from '../components/panel/TarjetaResumen';
 import ListaTurnosMedico from '../components/turnos/ListaTurnosMedico';
+import { claveLocal, tituloDia } from '../components/utils/fecha';
 import styles from '../components/utils/Formulario.module.scss';
+import panel from './PanelMedico.module.scss';
 import type { ITurnoMedico } from '../types/TurnoMedico.types';
 
 // Inicio del médico: solo sus turnos de hoy y unos contadores
@@ -24,8 +26,14 @@ const InicioMedico = () => {
                     <Col xs={6} sm={4}><TarjetaResumen titulo="Atendidos" valor={atendidos} isLoading={isLoading} /></Col>
                 </Row>
 
-                <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-                    <h2 className="fs-5 mb-0">Turnos de hoy</h2>
+                <div className={panel.encabezado}>
+                    <div>
+                        <h2 className={panel.subtitulo}>
+                            <CalendarCheck size={24} aria-hidden="true" />
+                            Turnos de hoy
+                        </h2>
+                        <p className={panel.dia}>{tituloDia(claveLocal(new Date()))}</p>
+                    </div>
                     <Link to="/mis-turnos" className={`btn ${styles.botonSecundario} d-inline-flex align-items-center gap-2`}>
                         <CalendarWeek size={16} aria-hidden="true" />
                         Ver turnos de otros días
