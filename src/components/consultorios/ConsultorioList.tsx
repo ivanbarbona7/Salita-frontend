@@ -31,7 +31,7 @@ interface AccionesProps {
 
 // "Ver" lo tienen todos; Editar y Desactivar, solo el administrador
 const Acciones = ({ consultorio, esAdmin, onVer, onDesactivar }: AccionesProps) => (
-    <div className="d-inline-flex flex-wrap gap-2">
+    <div className="d-flex gap-2">
         <BotonAccion tipo="ver" onClick={() => onVer(consultorio.id)} />
         {esAdmin && <BotonAccion tipo="editar" to={`/consultorios/editar/${consultorio.id}`} />}
         {esAdmin && <BotonAccion tipo="cierres" to={`/consultorios/${consultorio.id}/cierres`} />}
@@ -115,7 +115,7 @@ const ConsultorioList = () => {
                                     <th>Especialidades</th>
                                     <th>Médicos</th>
                                     <th>Estado</th>
-                                    <th className="text-end">Acciones</th>
+                                    <th className={`text-end ${styles.colAcciones}`}>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,10 +124,10 @@ const ConsultorioList = () => {
                                     return (
                                         <tr key={c.id} className={activo ? undefined : styles.filaInactiva}>
                                             <td>
-                                                <strong>{c.nombre}</strong>
+                                                <strong className={styles.sinCorte}>{c.nombre}</strong>
                                                 <div className="small text-muted">{c.ciudad}</div>
                                             </td>
-                                            <td>{responsable(c)}</td>
+                                            <td className={styles.sinCorte}>{responsable(c)}</td>
                                             <td>
                                                 {c.todasLasEspecialidades ? (
                                                     <span className={styles.chipEsp}>Todas las especialidades</span>
@@ -142,7 +142,7 @@ const ConsultorioList = () => {
                                                     <span className="small text-muted">Sin médicos</span>
                                                 ) : (
                                                     c.medicos?.map((m) => (
-                                                        <div key={m.id} className="small">{m.apellido}, {m.nombre}</div>
+                                                        <div key={m.id} className={`small ${styles.sinCorte}`}>{m.apellido}, {m.nombre}</div>
                                                     ))
                                                 )}
                                             </td>
@@ -151,7 +151,7 @@ const ConsultorioList = () => {
                                                     {activo ? 'Activo' : 'Inactivo'}
                                                 </Badge>
                                             </td>
-                                            <td className="text-end">
+                                            <td className={styles.colAcciones}>
                                                 <Acciones consultorio={c} esAdmin={esAdmin} onVer={setIdVista} onDesactivar={setADesactivar} />
                                             </td>
                                         </tr>
