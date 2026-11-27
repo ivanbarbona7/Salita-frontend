@@ -1,0 +1,115 @@
+@use '../utils/paleta' as *;
+
+// Tabla de turnos del médico: mismo estilo que la del dashboard de recepción
+.tabla {
+    background: $superficie;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    overflow: hidden;
+    margin-bottom: 0;
+    --bs-table-bg: transparent;
+    --bs-table-hover-bg: #{$primario-suave};
+
+    thead th {
+        padding: 12px 14px;
+        background: $primario-suave;
+        color: $primario-profundo;
+        font-weight: 700;
+        white-space: nowrap;
+        border-bottom: 2px solid $primario;
+    }
+
+    tbody td {
+        padding: 14px;
+        border-bottom: 1px solid $borde;
+        vertical-align: middle;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    // Franja de color a la izquierda según el estado del turno
+    tbody tr td:first-child {
+        border-left: 5px solid transparent;
+    }
+
+    tbody tr.filaPendiente td:first-child {
+        border-left-color: #ffc107;
+    }
+
+    tbody tr.filaAtendida td:first-child {
+        border-left-color: #198754;
+    }
+
+    tbody tr.filaNoAsistio td:first-child {
+        border-left-color: #343a40;
+    }
+
+    tbody tr.filaCancelada td:first-child {
+        border-left-color: #adb5bd;
+    }
+}
+
+.hora {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: $primario-suave;
+    color: $primario-profundo;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.principal {
+    font-weight: 600;
+    color: $texto;
+}
+
+.secundario {
+    font-size: 0.85rem;
+    color: $texto-suave;
+}
+
+// Tarjetas para celular
+.tarjeta {
+    background: $superficie;
+    border: 1px solid $borde;
+    border-left: 6px solid #ffc107;
+    border-radius: $radio;
+    box-shadow: $sombra;
+    padding: 14px 16px;
+
+    &.tarjetaAtendida {
+        border-left-color: #198754;
+    }
+
+    &.tarjetaNoAsistio {
+        border-left-color: #343a40;
+    }
+
+    &.tarjetaCancelada {
+        border-left-color: #adb5bd;
+    }
+}
+
+.tarjetaCabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.tarjetaFila {
+    margin-bottom: 8px;
+}
+
+.vacio {
+    padding: 48px 16px;
+    text-align: center;
+    color: $texto-suave;
+    background: $superficie;
+    border-radius: $radio;
+    box-shadow: $sombra;
+}
